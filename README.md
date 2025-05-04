@@ -1,3 +1,4 @@
+
 # Microserviço de Validação de Documentos com Google Cloud Vision
 
 Este microserviço realiza a análise de documentos (como RG, CPF, etc.) utilizando a API do **Google Cloud Vision**, extraindo texto (OCR) e avaliando se o conteúdo é válido com base em regras heurísticas e estrutura esperada.
@@ -42,6 +43,23 @@ GOOGLE_CLIENT_EMAIL=furia-knowyourfan@furia-know-your-fan.iam.gserviceaccount.co
 
 ---
 
+### 🔐 Autenticação com Google Cloud
+
+Este projeto utiliza uma **conta de serviço** do Google Cloud. Você precisará de um arquivo JSON com as credenciais da conta de serviço.
+
+1. Acesse [console.cloud.google.com](https://console.cloud.google.com).
+2. Vá em **IAM e administrador > Contas de serviço**.
+3. Crie ou selecione uma conta de serviço e clique em **"Gerar chave"** no formato **JSON**.
+4. Coloque o arquivo em:  
+   ```bash
+   src/auth/seu-arquivo.json
+   ```
+5. No código (`googleVisionService.ts`), essas credenciais são importadas diretamente via `import`.
+
+> ✅ O arquivo `.gitignore` já inclui `src/auth/*.json`, então ele **não será enviado ao repositório.**
+
+---
+
 ## 📄 Endpoints
 
 ### POST `/verify`
@@ -49,8 +67,7 @@ GOOGLE_CLIENT_EMAIL=furia-knowyourfan@furia-know-your-fan.iam.gserviceaccount.co
 **Enviar documento via arquivo:**
 
 ```bash
-curl -X POST http://localhost:3000/verify \
-  -F "document=@/caminho/para/rg.jpg"
+curl -X POST http://localhost:3000/verify   -F "document=@/caminho/para/rg.jpg"
 ```
 
 **Enviar via base64:**
