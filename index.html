@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validador de Documento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
+        <h1 class="text-xl font-bold mb-4 text-center">Validação de Documento</h1>
+
+        <div class="space-y-4">
+            <input type="file" id="document-file" class="w-full border p-2 rounded" />
+            <button type="button" id="uploadButton"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
+                Enviar
+            </button>
+        </div>
+
+        <div class="mt-6">
+            <h2 class="text-lg font-semibold mb-2">Resposta da API:</h2>
+            <pre class="bg-gray-100 p-4 rounded overflow-x-auto text-sm">
+<code id="responseCode">Aguardando envio...</code>
+      </pre>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const file = document.getElementById('document-file').files[0];
+            const responseCode = document.getElementById('responseCode');
+
+            if (!file) {
+                alert('Selecione um arquivo antes de enviar.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('document', file);
+
+            responseCode.textContent = 'Processando...';
+
+            fetch('http://localhost:5002/verify-document', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data)
+                    //responseCode.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(err => {
+                    responseCode.textContent = 'Erro: ' + err.message;
+                });
+        });
+    </script>
+</body>
+
+</html>
